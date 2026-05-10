@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!--
+    Source SVG for the OpenGraph / Twitter card preview. Render to PNG
+    (Twitter doesn't reliably handle SVG-only OG) with e.g.:
+
+        magick frontend/public/og-image.svg \
+               frontend/public/og-image.png
+
+    The `og:image` meta in index.html points at og-image.png — drop the
+    rasterized file there and crawlers pick it up.
+  -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#0b0d12" />
+      <stop offset="100%" stop-color="#171924" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7c5cff" />
+      <stop offset="100%" stop-color="#a892ff" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#bg)" />
+
+  <!-- accent bar -->
+  <rect x="80" y="80" width="6" height="80" fill="url(#accent)" />
+
+  <!-- chip: testnet -->
+  <g transform="translate(110 95)">
+    <rect width="180" height="34" rx="17" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.3)" />
+    <text x="22" y="22" fill="#f59e0b" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="600" letter-spacing="2">
+      SEPOLIA · TESTNET
+    </text>
+  </g>
+
+  <!-- name -->
+  <text x="100" y="260" fill="#eef0f7" font-family="ui-sans-serif, system-ui, sans-serif" font-size="84" font-weight="700" letter-spacing="-2">
+    Secudigate
+  </text>
+
+  <!-- tagline line 1 -->
+  <text x="100" y="340" fill="#a892ff" font-family="ui-sans-serif, system-ui, sans-serif" font-size="36" font-weight="500" letter-spacing="-1">
+    Non-custodial stablecoin payments.
+  </text>
+
+  <!-- tagline line 2 -->
+  <text x="100" y="386" fill="#a892ff" font-family="ui-sans-serif, system-ui, sans-serif" font-size="36" font-weight="500" letter-spacing="-1">
+    Open contract. Signed webhooks.
+  </text>
+
+  <!-- feature bullets -->
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="20" fill="#9aa0b4" letter-spacing="0">
+    <text x="100" y="470">→  Open-source contract  ·  MIT licensed</text>
+    <text x="100" y="504">→  Chainlink-priced daily limits  ·  on-chain OFAC screen</text>
+    <text x="100" y="538">→  HMAC-signed webhooks with 24h rotation grace</text>
+  </g>
+
+  <!-- corner mark -->
+  <text x="100" y="592" fill="#5a6276" font-family="ui-monospace, monospace" font-size="14">
+    secudigate.com  ·  mainnet after external audit
+  </text>
+</svg>

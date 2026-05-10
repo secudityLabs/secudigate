@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b0d12" />
+    <meta name="color-scheme" content="dark light" />
+
+    <!-- Pre-React theme bootstrap. Resolves the saved theme before paint
+         so there's no flash of the wrong theme on initial load. Dark is
+         the hard default; visitors who haven't explicitly toggled see
+         dark regardless of OS prefers-color-scheme. MUST stay in sync
+         with src/hooks/useTheme.ts. -->
+    <script>
+      (function () {
+        try {
+          var stored = localStorage.getItem("secudigate:theme:v1");
+          if (stored === "light") document.documentElement.setAttribute("data-theme", "light");
+        } catch (e) { /* localStorage disabled — fall through to default dark */ }
+      })();
+    </script>
+
+    <!-- Tab icon: the SVG wraps the logo PNG with built-in padding so the
+         downsampled tab favicon doesn't render edge-to-edge. PNG falls
+         through for older browsers that don't pick up SVG icons. -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png"     href="/logo-secudigate.png" />
+    <link rel="apple-touch-icon"          href="/logo-secudigate.png" />
+
+    <title>Secudigate — non-custodial stablecoin payment gateway</title>
+    <meta name="description" content="Non-custodial stablecoin payment gateway. Open contract, signed webhooks, Chainlink-priced daily limits, on-chain OFAC screen. MIT licensed. Sepolia testnet today, mainnet after audit." />
+
+    <!-- Open Graph (Facebook, LinkedIn, Telegram, Discord). -->
+    <meta property="og:type"          content="website" />
+    <meta property="og:site_name"     content="Secudigate" />
+    <meta property="og:title"         content="Secudigate — non-custodial stablecoin payment gateway" />
+    <meta property="og:description"   content="Non-custodial stablecoin payment gateway. Open contract, signed webhooks, Chainlink-priced daily limits, on-chain OFAC screen. Sepolia today." />
+    <meta property="og:image"         content="/og-image.png" />
+    <meta property="og:image:width"   content="1200" />
+    <meta property="og:image:height"  content="630" />
+
+    <!-- Twitter / X card. -->
+    <meta name="twitter:card"         content="summary_large_image" />
+    <meta name="twitter:title"        content="Secudigate — non-custodial stablecoin payment gateway" />
+    <meta name="twitter:description"  content="Non-custodial stablecoin payment gateway. Open contract, signed webhooks, Chainlink-priced daily limits, on-chain OFAC screen." />
+    <meta name="twitter:image"        content="/og-image.png" />
+
+    <!-- Discourage crawlers from indexing the testnet demo. Remove this
+         line once you're ready for search engines to surface the site. -->
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

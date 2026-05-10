@@ -1,0 +1,160 @@
+// Secudigate backend schema. SQLite for the demo, Postgres later.
+//
+// Mirrors the frontend's localStorage shapes so the API can replace the
+// in-browser stores with minimal frontend churn. Hex / bigint values are
+// stored as strings to sidestep SQLite's INTEGER 64-bit limits and to keep
+// the API responses string-based (matching ABI calldata expectations).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Off-chain merchant settings (mirrors MerchantSettings in the frontend).
+// The on-chain `merchants[address]` mapping in the contract is the source
+// of truth for treasury / fees / daily limit; this row caches the rest
+// (branding, accepted tokens / chains).
+model Merchant {
+  address              String   @id // 0x-prefixed 40-hex
+  businessName         String   @default("")
+  brandColor           String   @default("#7c5cff")
+  logoUrl              String?
+  defaultTreasury      String
+  acceptedTokens       String   // JSON array of stablecoin symbols
+  acceptedChains       String   // JSON array of chain ids
+  defaultChainId       Int
+  merchantFeeBps       Int      @default(0)
+  merchantFeeReceiver  String
+  merchantDailyLimit   String   @default("0") // uint256 as decimal string
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  invoices     Invoice[]
+  depositLinks DepositLink[]
+  deposits     Deposit[]
+  webhooks     Webhook[]
+}
+
+model Invoice {
+  id              String   @id // bytes32 hex (0x + 64 chars)
+  merchantAddress String
+  merchant        Merchant @relation(fields: [merchantAddress], references: [address])
+  creator         String   // wallet that issued the invoice (may differ from merchant)
+  chainId         Int
+  token           String   // "USDC" | "USDT" | "DAI"
+  amount          String   // human-readable decimal, e.g. "100.50"
+  description     String?
+  items           String?  // JSON array of { description, quantity, unitPrice }
+  taxRateBps      Int?
+  // Discriminator: "invoice" (default, e-commerce / marketplace) or
+  // "freelance" (freelancer billing — has client info, no merchant fee).
+  // The on-chain contract treats both identically; this is a UI / record
+  // distinction only.
+  kind            String   @default("invoice")
+  // Freelance-specific metadata. Optional for kind="invoice".
+  clientName      String?
+  clientEmail     String?
+  invoiceNumber   String?  // Human-friendly seq like "INV-2026-001"; per-merchant scope.
+  expiresAt       DateTime
+  status          String   // "pending" | "paid" | "expired"
+  txHash          String?
+  payer           String?
+  paidAt          DateTime?
+  createdAt       DateTime @default(now())
+
+  @@index([merchantAddress])
+  @@index([creator])
+  @@index([status])
+  @@index([kind])
+}
+
+model DepositLink {
+  slug             String   @id
+  merchantAddress  String
+  merchant         Merchant @relation(fields: [merchantAddress], references: [address])
+  chainId          Int
+  treasury         String
+  title            String
+  description      String?
+  requireReference Boolean  @default(false)
+  referenceLabel   String   @default("Reference")
+  minAmount        String?
+  maxAmount        String?
+  active           Boolean  @default(true)
+  createdAt        DateTime @default(now())
+
+  deposits Deposit[]
+
+  @@index([merchantAddress])
+}
+
+model Deposit {
+  id              String      @id // application-generated hex
+  linkSlug        String
+  link            DepositLink @relation(fields: [linkSlug], references: [slug])
+  merchantAddress String
+  merchant        Merchant    @relation(fields: [merchantAddress], references: [address])
+  chainId         Int
+  payer           String
+  reference       String?
+  token           String
+  amount          String
+  txHash          String
+  paidAt          DateTime
+
+  @@index([merchantAddress])
+  @@index([linkSlug])
+}
+
+model Webhook {
+  id              String   @id @default(cuid())
+  merchantAddress String
+  merchant        Merchant @relation(fields: [merchantAddress], references: [address])
+  url             String
+  secret          String   // HMAC-SHA256 signing key (current)
+  // Rotation grace window: when a merchant rotates, the prior secret moves
+  // here with an expiry. Receivers should accept either signature until the
+  // expiry passes — the standard dual-secret rotation pattern. NULL means
+  // no rotation is in progress.
+  previousSecret           String?
+  previousSecretExpiresAt  DateTime?
+  events          String   // JSON array, e.g. ["invoice.paid", "deposit.received"]
+  active          Boolean  @default(true)
+  createdAt       DateTime @default(now())
+
+  deliveries WebhookDelivery[]
+
+  @@index([merchantAddress])
+}
+
+model WebhookDelivery {
+  id             String    @id @default(cuid())
+  webhookId      String
+  // Cascade: deleting a webhook drops its delivery history with it. The
+  // merchant explicitly chose to remove the webhook; orphaned delivery
+  // rows that can no longer be associated with a live config aren't
+  // useful as an audit trail and Prisma blocks the parent delete
+  // without this directive.
+  webhook        Webhook   @relation(fields: [webhookId], references: [id], onDelete: Cascade)
+  eventType      String
+  payload        String    // JSON envelope sent to the merchant
+  attempts       Int       @default(0)
+  lastAttemptAt  DateTime?
+  successAt      DateTime?
+  responseStatus Int?
+  responseBody   String?
+  createdAt      DateTime  @default(now())
+
+  @@index([webhookId])
+}
+
+// Cursor for the chain indexer — last block we've processed for each chain.
+model IndexerState {
+  chainId   Int      @id
+  lastBlock BigInt
+  updatedAt DateTime @updatedAt
+}

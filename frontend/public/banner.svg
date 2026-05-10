@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="500" viewBox="0 0 1500 500">
+  <!--
+    X profile banner (1500×500, 3:1 ratio).
+    Rasterize once:
+
+        magick frontend/public/banner.svg frontend/public/banner.png
+        # or
+        rsvg-convert -w 1500 -h 500 frontend/public/banner.svg -o frontend/public/banner.png
+
+    Upload the PNG as your X header image.
+
+    Layout notes:
+    - Profile-photo safe zone: a ~200×200 circle in the bottom-left, centered
+      roughly at (130, 410). Nothing meaningful goes there — the avatar
+      overlays it.
+    - The wordmark + tagline live in the right two-thirds.
+    - Decorative gradient diagonals on the left fill the negative space
+      around where the avatar will sit, without competing with it.
+  -->
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#0b0d12" />
+      <stop offset="100%" stop-color="#171924" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%"   stop-color="#7c5cff" />
+      <stop offset="100%" stop-color="#a892ff" />
+    </linearGradient>
+    <linearGradient id="fade" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%"   stop-color="#7c5cff" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="#7c5cff" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="1500" height="500" fill="url(#bg)" />
+
+  <!-- decorative diagonal grid lines on the left third (subtle, low alpha) -->
+  <g stroke="#7c5cff" stroke-opacity="0.08" stroke-width="1">
+    <line x1="-100" y1="600" x2="600"  y2="-100" />
+    <line x1="-100" y1="700" x2="700"  y2="-100" />
+    <line x1="-100" y1="800" x2="800"  y2="-100" />
+    <line x1="-100" y1="900" x2="900"  y2="-100" />
+  </g>
+
+  <!-- soft glow behind the avatar zone (helps the avatar pop against bg) -->
+  <circle cx="130" cy="410" r="190" fill="url(#fade)" />
+
+  <!-- thin accent rule separating avatar zone from text -->
+  <rect x="350" y="120" width="2" height="260" fill="url(#accent)" rx="1" />
+
+  <!-- wordmark -->
+  <text x="400" y="230"
+        fill="#eef0f7"
+        font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+        font-size="92" font-weight="700" letter-spacing="-3">
+    Secudigate
+  </text>
+
+  <!-- one-line tagline -->
+  <text x="404" y="288"
+        fill="#a892ff"
+        font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
+        font-size="28" font-weight="500" letter-spacing="-0.5">
+    Non-custodial stablecoin payments. Open contract.
+  </text>
+
+  <!-- chip row -->
+  <g font-family="ui-sans-serif, system-ui, sans-serif" font-size="13" font-weight="600" letter-spacing="2">
+    <!-- Open-source -->
+    <g transform="translate(404 332)">
+      <rect width="140" height="30" rx="15"
+            fill="rgba(124,92,255,0.10)" stroke="rgba(124,92,255,0.4)" />
+      <text x="22" y="20" fill="#a892ff">OPEN-SOURCE</text>
+    </g>
+    <!-- MIT -->
+    <g transform="translate(554 332)">
+      <rect width="68" height="30" rx="15"
+            fill="rgba(124,92,255,0.10)" stroke="rgba(124,92,255,0.4)" />
+      <text x="22" y="20" fill="#a892ff">MIT</text>
+    </g>
+    <!-- Testnet -->
+    <g transform="translate(632 332)">
+      <rect width="124" height="30" rx="15"
+            fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.35)" />
+      <text x="22" y="20" fill="#f59e0b">SEPOLIA</text>
+    </g>
+  </g>
+
+  <!-- corner mark, top-right -->
+  <text x="1460" y="60"
+        text-anchor="end"
+        fill="#5a6276"
+        font-family="ui-monospace, SFMono-Regular, monospace"
+        font-size="13" letter-spacing="1">
+    mainnet after external audit
+  </text>
+</svg>

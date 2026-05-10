@@ -1,0 +1,11 @@
+node_modules
+dist
+*.log
+.env
+.env.local
+.env.*.local
+
+# Prisma SQLite + migrations artifacts
+prisma/dev.db
+prisma/dev.db-journal
+prisma/migrations/migration_lock.toml.*

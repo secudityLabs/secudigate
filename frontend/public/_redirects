@@ -1,0 +1,5 @@
+# Cloudflare Pages / Netlify SPA fallback. Catch-all → index.html so client-side
+# routes (/merchant, /pay/:id, /deposit/:slug, etc.) work on direct visits and
+# refreshes. Static assets pass through untouched because they have file
+# extensions and the catch-all only matches paths without one.
+/*    /index.html   200
