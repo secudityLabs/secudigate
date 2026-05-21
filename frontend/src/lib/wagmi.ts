@@ -35,23 +35,45 @@ function sepoliaTransport() {
   return fallback(urls.map((u) => http(u, HTTP_OPTS)));
 }
 
-// Register every chain we plan to support so users can connect to any of
-// them — but tokens.ts and chains.ts only expose Sepolia as enabled today.
-// Mainnets sit here ready for activation when the gateway contract is
-// deployed there and token registry entries are added.
+// All chains here register for the wallet selector; only Sepolia is enabled
+// in tokens.ts / chains.ts. Every transport must use an explicit CORS-friendly
+// RPC — viem's defaults (eth.merkle.io for mainnet, etc.) reject browser CORS
+// and rate-limit. Do not collapse these back to `http(undefined)`.
 export const wagmiConfig = getDefaultConfig({
   appName: "Secudigate",
   projectId,
   chains: [sepolia, mainnet, bsc, arbitrum, linea, base, optimism, polygon],
   transports: {
     [sepolia.id]:  sepoliaTransport(),
-    [mainnet.id]:  http(undefined, HTTP_OPTS),
-    [bsc.id]:      http(undefined, HTTP_OPTS),
-    [arbitrum.id]: http(undefined, HTTP_OPTS),
-    [linea.id]:    http(undefined, HTTP_OPTS),
-    [base.id]:     http(undefined, HTTP_OPTS),
-    [optimism.id]: http(undefined, HTTP_OPTS),
-    [polygon.id]:  http(undefined, HTTP_OPTS),
+    [mainnet.id]:  fallback([
+      http("https://cloudflare-eth.com", HTTP_OPTS),
+      http("https://eth.llamarpc.com", HTTP_OPTS),
+      http("https://ethereum-rpc.publicnode.com", HTTP_OPTS),
+    ]),
+    [bsc.id]:      fallback([
+      http("https://bsc-rpc.publicnode.com", HTTP_OPTS),
+      http("https://binance.llamarpc.com", HTTP_OPTS),
+    ]),
+    [arbitrum.id]: fallback([
+      http("https://arbitrum-one-rpc.publicnode.com", HTTP_OPTS),
+      http("https://arbitrum.llamarpc.com", HTTP_OPTS),
+    ]),
+    [linea.id]:    fallback([
+      http("https://linea-rpc.publicnode.com", HTTP_OPTS),
+      http("https://1rpc.io/linea", HTTP_OPTS),
+    ]),
+    [base.id]:     fallback([
+      http("https://base-rpc.publicnode.com", HTTP_OPTS),
+      http("https://base.llamarpc.com", HTTP_OPTS),
+    ]),
+    [optimism.id]: fallback([
+      http("https://optimism-rpc.publicnode.com", HTTP_OPTS),
+      http("https://optimism.llamarpc.com", HTTP_OPTS),
+    ]),
+    [polygon.id]:  fallback([
+      http("https://polygon-bor-rpc.publicnode.com", HTTP_OPTS),
+      http("https://polygon.llamarpc.com", HTTP_OPTS),
+    ]),
   },
   ssr: false,
 });
