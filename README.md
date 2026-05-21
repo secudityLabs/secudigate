@@ -19,6 +19,16 @@ reconciliation, no chargebacks.
 
 ---
 
+## Live demo
+
+Try the dashboard at **[secudigate.com](https://secudigate.com)** — running in **demo mode**.
+
+- The contract is **live on Sepolia testnet** at [`0x5d398ab8…AB612`](https://sepolia.etherscan.io/address/0x5d398ab8AaB4D49c0694271959Ca06A3fD3AB612). Wallet connect, on-chain `pay()` / `quote()` / merchant registration, and the embeddable checkout flow all work end-to-end against the deployed contract.
+- The merchant dashboard persists state **in your browser's `localStorage`** — no backend is hosted publicly, so each visitor sees only their own session. The full Fastify backend (chain indexer + HMAC-signed webhook dispatcher) ships in this repo; self-host the [`backend/`](backend/) directory to enable cross-device sync and webhook delivery.
+- Need Sepolia ETH? Use any faucet (e.g. [sepoliafaucet.com](https://sepoliafaucet.com)). Mint test stablecoins via the `/admin` page after connecting your wallet.
+
+---
+
 ## Why this exists
 
 Crypto payments are technically possible today — anyone can publish a wallet
