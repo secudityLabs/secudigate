@@ -30,11 +30,9 @@ export default function WebhooksPage() {
       <div>
         <MerchantNav />
         <div className="card p-12 text-center">
-          <h1 className="text-2xl font-semibold">Backend not configured</h1>
-          <p className="mt-2 text-ink-dim text-sm max-w-md mx-auto">
-            Webhooks require the Secudigate backend. Set{" "}
-            <code className="font-mono text-xs">VITE_API_BASE_URL</code> in
-            <code className="font-mono text-xs"> frontend/.env</code> and restart the dev server.
+          <h1 className="text-2xl font-semibold">Coming soon</h1>
+          <p className="mt-3 text-ink-dim text-sm max-w-md mx-auto">
+            You're viewing the public preview of Secudigate. Webhooks aren't active in the demo — this feature will be available in production.
           </p>
         </div>
       </div>
