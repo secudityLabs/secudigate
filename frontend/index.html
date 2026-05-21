@@ -45,9 +45,40 @@
     <meta name="twitter:description"  content="Non-custodial stablecoin payment gateway. Open contract, signed webhooks, Chainlink-priced daily limits, on-chain OFAC screen." />
     <meta name="twitter:image"        content="/og-image.png" />
 
-    <!-- Discourage crawlers from indexing the testnet demo. Remove this
-         line once you're ready for search engines to surface the site. -->
-    <meta name="robots" content="noindex, nofollow" />
+    <link rel="canonical" href="https://secudigate.com/" />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://secudigate.com/#org",
+          "name": "Secudigate",
+          "url": "https://secudigate.com",
+          "logo": "https://secudigate.com/logo-secudigate.png",
+          "sameAs": [
+            "https://github.com/secuditylabs/secudigate"
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "Secudigate",
+          "applicationCategory": "FinanceApplication",
+          "operatingSystem": "Web, Ethereum",
+          "description": "Open-source non-custodial stablecoin payment gateway. Multi-tenant Solidity contract with 157 tests (incl. 80 adversarial), HMAC-signed webhooks, Chainlink USD price feeds, on-chain OFAC sanctions screening. MIT licensed.",
+          "url": "https://secudigate.com",
+          "license": "https://opensource.org/licenses/MIT",
+          "publisher": { "@id": "https://secudigate.com/#org" },
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          }
+        }
+      ]
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>

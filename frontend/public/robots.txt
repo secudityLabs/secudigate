@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Per-merchant / per-invoice URLs are dynamic and shouldn't pollute the index.
+Disallow: /pay/
+Disallow: /deposit/
+
+Sitemap: https://secudigate.com/sitemap.xml
