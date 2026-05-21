@@ -14,14 +14,14 @@ export default function MerchantNav() {
   return (
     <>
       <RegistrationBanner />
-      <nav className="flex gap-1 mb-6 border-b border-line/60 -mt-2">
+      <nav className="flex gap-1 mb-6 border-b border-line/60 -mt-2 overflow-x-auto -mx-5 px-5 sm:mx-0 sm:px-0">
         {ITEMS.map((i) => (
           <NavLink
             key={i.to}
             to={i.to}
             end={i.end}
             className={({ isActive }) =>
-              `px-3 py-2 text-sm font-medium border-b-2 transition-colors -mb-px ${
+              `shrink-0 px-3 py-2 text-sm font-medium border-b-2 transition-colors -mb-px ${
                 isActive
                   ? "border-brand text-ink"
                   : "border-transparent text-ink-dim hover:text-ink"
