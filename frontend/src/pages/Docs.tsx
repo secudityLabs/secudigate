@@ -132,10 +132,11 @@ export default function Docs() {
 
         <Section id="status" title="Status & roadmap">
           <p>
-            <strong>Today:</strong> Sepolia testnet, 69 contract tests
-            passing, full dashboard + customer flows live, OFAC sanctions
-            oracle wired, geo-block on the hosted frontend, webhook
-            dispatcher with retries and 24h dual-secret rotation grace.
+            <strong>Today:</strong> Sepolia testnet, 157 contract tests
+            passing (incl. an 80-test adversarial suite), full dashboard +
+            customer flows live, OFAC sanctions oracle wired, geo-block on
+            the hosted frontend, webhook dispatcher with retries and 24h
+            dual-secret rotation grace.
           </p>
           <p className="mt-2">
             <strong>Before mainnet:</strong> external security audit,
@@ -243,9 +244,9 @@ export default function Docs() {
             push events to your backend the moment the chain indexer sees
             a <code>PaymentReceived</code> or <code>DepositReceived</code>{" "}
             event. Standard HMAC-SHA256 signed envelope. Retries on
-            non-2xx with exponential backoff (30s → 2m → 10m → 1h → 6h,
-            max 5 attempts). Every attempt is logged and visible in the{" "}
-            <strong>Deliveries</strong> panel.
+            non-2xx with a 30-second cooldown between attempts, max 5
+            attempts; after that the delivery is marked failed and visible
+            in the <strong>Deliveries</strong> panel.
           </p>
           <p>
             Rotation: when you click <strong>Rotate</strong>, the current
@@ -417,8 +418,9 @@ export function verifyWithRotation(rawBody, header) {
         <Section id="d-contract" title="Smart contract">
           <p>
             One <code>Secudigate</code> contract per chain. Multi-tenant.
-            No custody. Audited test suite (69 passing) lives at{" "}
-            <code>test/Secudigate.t.sol</code>.
+            No custody. Test suite (157 passing, incl. 80-test adversarial
+            suite) lives under <code>test/</code> and{" "}
+            <code>test/attacks/</code>.
           </p>
           <Code>{`function registerMerchant(
   address treasury,
@@ -630,7 +632,7 @@ event DepositReceived(
             <li><strong>Geo-block.</strong> The hosted frontend refuses to render for visitors connecting from comprehensive-embargo jurisdictions (IR, KP, CU, SY). UI-layer; the contract is the hard gate.</li>
             <li><strong>Webhook signing.</strong> Every outbound webhook is HMAC-SHA256 over the raw body, 24h dual-secret rotation grace window. Receivers should verify before processing.</li>
             <li><strong>Admin-can't-rug.</strong> The contract owner and ADMIN_ROLE holders cannot edit any merchant's slot. Merchants are walled off from operator interference by <code>msg.sender</code> checks.</li>
-            <li><strong>Pre-mainnet</strong> — external audit, mainnet deploy, multi-chain enable. Threat model at <a className="text-brand-soft hover:underline" href="https://github.com/secuditylabs/secudigate/blob/main/docs/threat-model.md" target="_blank" rel="noreferrer">docs/threat-model.md</a>.</li>
+            <li><strong>Pre-mainnet</strong> — external audit, mainnet deploy, multi-chain enable. Threat model + attack-suite breakdown in <a className="text-brand-soft hover:underline" href="https://github.com/secuditylabs/secudigate/blob/main/SECURITY.md" target="_blank" rel="noreferrer">SECURITY.md</a>.</li>
             <li><strong>Security disclosure</strong> — see <Link className="text-brand-soft hover:underline" to="/security">/security</Link>.</li>
           </ul>
         </Section>
